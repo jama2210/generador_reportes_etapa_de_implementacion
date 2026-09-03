@@ -17,6 +17,7 @@ COL_DEPROV = "DEPROV"
 COL_SUPERVISOR = "SUPERVISOR"
 COL_MODALIDAD = "TIPO ASESORÍA"
 COL_FECHA = "Indique la fecha de realización de la asesoría (2)"
+COL_NOMBRE_ASESORIA = "NOMBRE ASESORÍA"
 
 # Se utiliza supervisor como asesor por defecto
 COL_ASESOR = COL_SUPERVISOR

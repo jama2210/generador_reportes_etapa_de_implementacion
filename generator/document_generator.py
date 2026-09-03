@@ -5,10 +5,9 @@ from docx.shared import Inches
 
 from config import (
     COL_FECHA,
-    COL_MODALIDAD,
-    COL_SUPERVISOR,
-    COL_ASESOR,
+    COL_NOMBRE_ASESORIA,
     LOGO_PATH,
+    MODALITY_SECTIONS
 )
 
 from generator.document_styles import (
@@ -18,23 +17,14 @@ from generator.document_styles import (
 )
 
 from generator.utils import (
-    clean_empty_value,
-    format_chilean_date,
-)
-
-from generator.section_classifier import (
-    SectionClassifier
-)
-
-from config import MODALITY_SECTIONS
-
-from generator.utils import (
-    clean_empty_value,
     format_chilean_date,
     has_real_content,
     is_not_applicable
 )
 
+from generator.section_classifier import (
+    SectionClassifier
+)
 
 class DocumentGenerator:
 
@@ -76,25 +66,59 @@ class DocumentGenerator:
 
         ordered_df = df_group.copy()
 
-        for idx, row in enumerate(
-            ordered_df.to_dict("records"),
-            start=1
-        ):
+        grouped_records = {}
+
+        for row in ordered_df.to_dict("records"):
+
+            asesoria = row.get(
+                COL_NOMBRE_ASESORIA,
+                "Sin nombre"
+            )
+
+            grouped_records.setdefault(
+                asesoria,
+                []
+            ).append(row)
+
+        for asesoria_name, records in grouped_records.items():
 
             document.add_page_break()
 
-            title = document.add_paragraph(
-                f"Asesoría N.º {idx}"
+            establishment_title = document.add_paragraph(
+                f"Registro asociado a: {asesoria_name}"
             )
 
-            format_heading(title)
+            format_heading(establishment_title)
 
-            self._add_record(
-                document,
-                row,
-                all_sections,
-                allowed_sections
-            )
+            multiple_sessions = len(records) > 1
+
+            for session_number, row in enumerate(
+                records,
+                start=1
+            ):
+
+                if multiple_sessions:
+
+                    session_title = document.add_paragraph(
+                        f"Sesión N.° {session_number}"
+                    )
+
+                    format_heading(session_title)
+
+                date_text = format_chilean_date(
+                    row.get(COL_FECHA)
+                )
+
+                document.add_paragraph(
+                    f"Fecha de realización: {date_text}"
+                )
+
+                self._add_record(
+                    document,
+                    row,
+                    all_sections,
+                    allowed_sections
+                )
 
         buffer = BytesIO()
 
@@ -135,9 +159,13 @@ class DocumentGenerator:
         format_title(title)
 
         table = document.add_table(
-            rows=5,
+            rows=6,
             cols=2
         )
+
+        establecimientos = df_group[
+           COL_NOMBRE_ASESORIA
+        ].nunique()
 
         table.style = "Table Grid"
 
@@ -155,6 +183,9 @@ class DocumentGenerator:
 
         table.cell(4,0).text = "Total de asesorías"
         table.cell(4,1).text = str(len(df_group))
+
+        table.cell(5,0).text = "Establecimientos asesorados"
+        table.cell(5,1).text = str(establecimientos)
 
     def _add_record(
         self,
