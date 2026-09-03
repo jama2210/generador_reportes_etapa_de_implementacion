@@ -55,3 +55,43 @@ INSTITUTIONAL_COLORS = {
 
 MAX_FILENAME_LENGTH = 120
 MAX_FOLDERNAME_LENGTH = 100
+
+# ==========================================
+# SECCIONES POR MODALIDAD
+# ==========================================
+
+MODALITY_SECTIONS = {
+
+    "Directa EE": [
+        "identificacion",
+        "nivelacion",
+        "liderazgo",
+        "asistencia",
+        "nudos_criticos",
+        "segundo_basico",
+        "cuarto_basico",
+        "septimo_basico",
+        "primero_medio",
+        "visitas",
+        "informacion_adicional"
+    ],
+
+    "Red EE": [
+        "identificacion",
+        "nivelacion",
+        "liderazgo",
+        "asistencia",
+        "nudos_criticos",
+        "segundo_basico",
+        "cuarto_basico",
+        "septimo_basico",
+        "primero_medio",
+        "visitas",
+        "informacion_adicional"
+    ],
+
+    "Monitoreo SLEP PADE": [
+        "identificacion",
+        "pade"
+    ]
+}

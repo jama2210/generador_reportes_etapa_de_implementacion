@@ -11,58 +11,62 @@ SECTION_PATTERNS = {
         "deprov",
         "tipo asesoria",
         "nombre asesoria",
-        "fecha de realizacion"
+        "fecha"
     ],
 
     "nivelacion": [
-        "nivelacion",
-        "aprendizaje",
-        "brechas de aprendizaje"
+        "nivelacion de aprendizajes"
     ],
 
     "liderazgo": [
-        "liderazgo",
+        "liderazgo pedagogico",
         "acompanamiento"
     ],
 
     "asistencia": [
-        "asistencia",
-        "cultura escolar"
+        "asistencia y cultura escolar"
     ],
 
     "nudos_criticos": [
-        "nudo",
-        "apoyo requerido"
+        "nudo"
+    ],
+
+    "segundo_basico": [
+        "2 basico",
+        "2o basico",
+        "2 básico"
+    ],
+
+    "cuarto_basico": [
+        "4 basico",
+        "4o basico",
+        "4 básico"
+    ],
+
+    "septimo_basico": [
+        "7 basico",
+        "7o basico",
+        "7 básico"
+    ],
+
+    "primero_medio": [
+        "1 medio",
+        "1o medio",
+        "1º año medio"
     ],
 
     "visitas": [
-        "visita",
-        "evidencia presentada",
+        "visitas de acompanamiento",
+        "evidencias presentadas",
         "medio de verificacion",
         "compromiso"
     ],
 
     "pade": [
-        "pade",
         "slep",
         "nivel de avance",
-        "obstaculo"
-    ],
-
-    "segundo_basico": [
-        "2 basico"
-    ],
-
-    "cuarto_basico": [
-        "4 basico"
-    ],
-
-    "septimo_basico": [
-        "7 basico"
-    ],
-
-    "primero_medio": [
-        "1 medio"
+        "obstaculo",
+        "implementacion del pade"
     ]
 }
 

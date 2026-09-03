@@ -8,6 +8,43 @@ from config import (
     MAX_FOLDERNAME_LENGTH
 )
 
+def has_real_content(value):
+
+    if value is None:
+        return False
+
+    value = str(value).strip()
+
+    if not value:
+        return False
+
+    invalid_values = {
+        "",
+        "nan",
+        "none",
+        "nat",
+        "no informado en el formulario",
+        "<br>",
+        "<br><br>"
+    }
+
+    return value.lower() not in invalid_values
+
+
+def is_not_applicable(value):
+
+    if value is None:
+        return True
+
+    value = str(value).strip().lower()
+
+    patterns = [
+        "no aplica",
+        "n/a",
+        "na"
+    ]
+
+    return value in patterns
 
 def normalize_text(text):
     """

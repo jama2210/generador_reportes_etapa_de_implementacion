@@ -56,9 +56,9 @@ if uploaded_file:
 
         st.stop()
 
-    df = DataCleaner.clean_dataframe(
-        df
-    )
+    df = DataCleaner.clean_dataframe(df)
+
+    df = DataCleaner.remove_not_applicable(df)
 
     total_registros = len(df)
 
@@ -141,6 +141,11 @@ if uploaded_file:
                 modalidad,
                 supervisor
             ) = group_key
+
+            group_df = DataCleaner.sort_records(
+                group_df,
+                "Indique la fecha de realización de la asesoría (2)"
+            )
 
             doc = generator.generate_document(
                 group_df,

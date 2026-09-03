@@ -26,8 +26,27 @@ from generator.section_classifier import (
     SectionClassifier
 )
 
+from config import MODALITY_SECTIONS
+
+from generator.utils import (
+    clean_empty_value,
+    format_chilean_date,
+    has_real_content,
+    is_not_applicable
+)
+
 
 class DocumentGenerator:
+
+    def _get_sections_for_modality(
+        self,
+        modality
+    ):
+
+        return MODALITY_SECTIONS.get(
+            modality,
+            ["identificacion", "informacion_adicional"]
+        )
 
     def generate_document(
         self,
@@ -47,8 +66,12 @@ class DocumentGenerator:
             group_info
         )
 
-        sections = SectionClassifier.build_section_map(
+        all_sections = SectionClassifier.build_section_map(
             df_group.columns
+        )
+
+        allowed_sections = self._get_sections_for_modality(
+            group_info["modalidad"]
         )
 
         ordered_df = df_group.copy()
@@ -69,7 +92,8 @@ class DocumentGenerator:
             self._add_record(
                 document,
                 row,
-                sections
+                all_sections,
+                allowed_sections
             )
 
         buffer = BytesIO()
@@ -136,10 +160,31 @@ class DocumentGenerator:
         self,
         document,
         row,
-        sections
+        all_sections,
+        allowed_sections
     ):
 
-        for section_name, columns in sections.items():
+        for section_name in allowed_sections:
+
+            columns = all_sections.get(
+                section_name,
+                []
+            )
+
+            visible_columns = []
+
+            for col in columns:
+
+                value = row.get(col)
+
+                if has_real_content(value):
+
+                    if not is_not_applicable(value):
+
+                        visible_columns.append(col)
+
+            if not visible_columns:
+                continue
 
             heading = document.add_paragraph(
                 section_name.replace(
@@ -157,14 +202,12 @@ class DocumentGenerator:
 
             table.style = "Table Grid"
 
-            for col in columns:
+            for col in visible_columns:
 
-                value = clean_empty_value(
-                    row.get(col)
-                )
+                value = row.get(col)
 
                 r = table.add_row()
 
-                r.cells[0].text = col
+                r.cells[0].text = str(col)
 
                 r.cells[1].text = str(value)

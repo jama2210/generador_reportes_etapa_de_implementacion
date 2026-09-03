@@ -14,6 +14,23 @@ from generator.utils import (
 class DataCleaner:
 
     @staticmethod
+    def remove_not_applicable(df):
+
+        replacements = [
+            "No aplica",
+            "NO APLICA",
+            "No Aplica",
+            "N/A",
+            "NA"
+        ]
+
+        return df.replace(
+            replacements,
+            "",
+            regex=False
+        )
+
+    @staticmethod
     def clean_dataframe(df):
 
         df = df.copy()
