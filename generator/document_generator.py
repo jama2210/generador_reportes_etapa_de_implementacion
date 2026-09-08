@@ -183,7 +183,12 @@ class DocumentGenerator:
             COL_NOMBRE_ASESORIA
         ].nunique()
 
+        # -----------------------------------
+        # MONITOREO PADE
+        # -----------------------------------
+
         if modalidad == "Monitoreo SLEP PADE":
+
             table = document.add_table(
                 rows=4,
                 cols=2
@@ -201,36 +206,73 @@ class DocumentGenerator:
             table.cell(2,1).text = modalidad
 
             table.cell(3,0).text = "Asesor"
-            table.cell(3,1).text = str(group_info["supervisor"])
+            table.cell(3,1).text = str(
+                group_info["supervisor"]
+            )
 
-            for row in table.rows:
+        # -----------------------------------
+        # RESTO DE MODALIDADES
+        # -----------------------------------
 
-                set_cell_background(
-                    row.cells[0],
-                    "006FB3"  # Primario
-                )
+        else:
 
-                set_cell_background(
-                    row.cells[1],
-                    "EEEEEE"  # Neutral
-                )
+            table = document.add_table(
+                rows=6,
+                cols=2
+            )
 
-            for row in table.rows:
-                style_cover_label(
-                    row.cells[0]
-                )   
-            
-            return
+            table.style = "Light Grid Accent 1"
 
-        if modalidad in [
-            "Directa EE",
-            "EE PADE"
-        ]:
-            table.cell(5,0).text = "Establecimientos asesorados"
+            table.cell(0,0).text = "Región"
+            table.cell(0,1).text = str(group_info["region"])
 
-        if modalidad == "Red EE":
-            table.cell(5,0).text = "Redes asesoradas"
-        
+            table.cell(1,0).text = "DEPROV"
+            table.cell(1,1).text = str(group_info["deprov"])
+
+            table.cell(2,0).text = "Modalidad"
+            table.cell(2,1).text = modalidad
+
+            table.cell(3,0).text = "Asesor"
+            table.cell(3,1).text = str(
+                group_info["supervisor"]
+            )
+
+            table.cell(4,0).text = "Total de asesorías"
+            table.cell(4,1).text = str(
+                len(df_group)
+            )
+
+            if modalidad == "Red EE":
+
+                table.cell(5,0).text = "Redes asesoradas"
+
+            else:
+
+                table.cell(5,0).text = "Establecimientos asesorados"
+
+            table.cell(5,1).text = str(
+                establecimientos
+            )
+
+        # -----------------------------------
+        # COLORES
+        # -----------------------------------
+
+        for row in table.rows:
+
+            set_cell_background(
+                row.cells[0],
+                "006FB3"
+            )
+
+            set_cell_background(
+                row.cells[1],
+                "EEEEEE"
+            )
+
+            style_cover_label(
+                row.cells[0]
+            )
 
     def _add_record(
         self,
