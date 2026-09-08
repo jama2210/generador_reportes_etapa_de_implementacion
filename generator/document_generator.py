@@ -3,6 +3,8 @@ from io import BytesIO
 from docx import Document
 from docx.shared import Inches
 from config import SECTION_DISPLAY_NAMES
+from generator.utils import normalize_text
+
 
 from generator.document_styles import (
     apply_document_styles,
@@ -299,10 +301,10 @@ class DocumentGenerator:
 
                     if not is_not_applicable(value):
                         if section_name == "identificacion":
-                            normalized = str(col).lower()
+                            normalized = normalize_text(col)
                             if(
-                                "fecha de realizacion" in normalized or
-                                "fecha de asesoria" in normalized
+                                "fecha" in normalized and
+                                "asesoria" in normalized
                             ):
                                 continue
 
