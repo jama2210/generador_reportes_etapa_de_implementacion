@@ -2,6 +2,38 @@ from io import BytesIO
 
 from docx import Document
 from docx.shared import Inches
+from config import SECTION_DISPLAY_NAMES
+from docx.oxml import parse_xml
+from docx.oxml.ns import nsdecls
+
+from generator.document_styles import (
+    apply_document_styles,
+    format_title,
+    format_heading,
+    set_cell_background,
+    style_cover_label
+)
+
+
+def set_cell_background(cell, color):
+    """
+    color ejemplo:
+    '006FB3'
+    'FE6565'
+    """
+
+    shading = parse_xml(
+        rf'<w:shd {nsdecls("w")} w:fill="{color}"/>'
+    )
+
+    cell._tc.get_or_add_tcPr().append(shading)
+
+from generator.document_styles import (
+    apply_document_styles,
+    format_title,
+    format_heading,
+    set_cell_background
+)
 
 from config import (
     COL_FECHA,
@@ -153,39 +185,67 @@ class DocumentGenerator:
     ):
 
         title = document.add_paragraph(
-            "Informe Individual Etapa De Implementación de la Asesoría"
+            "Informe Etapa De Implementación de la Asesoría"
         )
 
         format_title(title)
 
-        table = document.add_table(
-            rows=6,
-            cols=2
-        )
+        modalidad = str(
+            group_info["modalidad"]
+        ).strip()
 
         establecimientos = df_group[
-           COL_NOMBRE_ASESORIA
+            COL_NOMBRE_ASESORIA
         ].nunique()
 
-        table.style = "Table Grid"
+        if modalidad == "Monitoreo SLEP PADE":
+            table = document.add.table(
+                rows=4,
+                cols=2
+            )
 
-        table.cell(0,0).text = "Región"
-        table.cell(0,1).text = str(group_info["region"])
+            table.style = "Light Grid Accent 1"
 
-        table.cell(1,0).text = "DEPROV"
-        table.cell(1,1).text = str(group_info["deprov"])
+            table.cell(0,0).text = "Región"
+            table.cell(0,1).text = str(group_info["region"])
 
-        table.cell(2,0).text = "Modalidad"
-        table.cell(2,1).text = str(group_info["modalidad"])
+            table.cell(1,0).text = "DEPROV"
+            table.cell(1,1).text = str(group_info["deprov"])
 
-        table.cell(3,0).text = "Asesor"
-        table.cell(3,1).text = str(group_info["supervisor"])
+            table.cell(2,0).text = "Modalidad"
+            table.cell(2,1).text = modalidad
 
-        table.cell(4,0).text = "Total de asesorías"
-        table.cell(4,1).text = str(len(df_group))
+            table.cell(3,0).text = "Asesor"
+            table.cell(3,1).text = str(group_info["supervisor"])
 
-        table.cell(5,0).text = "Establecimientos asesorados"
-        table.cell(5,1).text = str(establecimientos)
+            for row in table.rows:
+
+                set_cell_background(
+                    row.cells[0],
+                    "006FB3"  # Primario
+                )
+
+                set_cell_background(
+                    row.cells[1],
+                    "EEEEEE"  # Neutral
+                )
+
+            for row in table.rows:
+                style_cover_label(
+                    row.cells[0]
+                )   
+            
+            return
+
+        if modalidad in [
+            "Directa EE",
+            "EE PADE"
+        ]:
+            table.cell(5,0).text = "Establecimientos asesorados"
+
+        if modalidad == "Red EE":
+            table.cell(5,0).text = "Redes asesoradas"
+        
 
     def _add_record(
         self,
@@ -211,6 +271,13 @@ class DocumentGenerator:
                 if has_real_content(value):
 
                     if not is_not_applicable(value):
+                        if section_name == "identificacion":
+                            normalized = str(col).lower()
+                            if(
+                                "fecha de realizacion" in normalized or
+                                "fecha de asesoria" in normalized
+                            ):
+                                continue
 
                         visible_columns.append(col)
 
@@ -218,10 +285,10 @@ class DocumentGenerator:
                 continue
 
             heading = document.add_paragraph(
-                section_name.replace(
-                    "_",
-                    " "
-                ).title()
+                SECTION_DISPLAY_NAMES.get(
+                    section_name,
+                    section_name
+                )
             )
 
             format_heading(heading)
@@ -231,7 +298,7 @@ class DocumentGenerator:
                 cols=2
             )
 
-            table.style = "Table Grid"
+            table.style = "Light Grid Accent 1"
 
             for col in visible_columns:
 

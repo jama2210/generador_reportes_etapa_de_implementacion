@@ -36,7 +36,8 @@ REQUIRED_COLUMNS = [
 
 MODALITY_MAPPING = {
     "directa ee": "Directa EE",
-    "red ee": "Red EE"
+    "red ee": "Red EE",
+    "ee pade": "EE PADE",
 }
 
 # =========================================
@@ -44,10 +45,18 @@ MODALITY_MAPPING = {
 # =========================================
 
 INSTITUTIONAL_COLORS = {
-    "primary": "003DA5",
-    "secondary": "D52B1E",
-    "text": "333333",
-    "light": "F2F2F2"
+
+    "primary": "006FB3",
+    "secondary": "FE6565",
+    "tertiary": "0A132D",
+    "accent": "A8B7C7",
+    "neutral": "EEEEEE",
+
+    "gray_a": "4A4A4A",
+    "gray_b": "8A8A8A",
+
+    "black": "111111",
+    "white": "FFFFFF"
 }
 
 # =========================================
@@ -56,6 +65,46 @@ INSTITUTIONAL_COLORS = {
 
 MAX_FILENAME_LENGTH = 120
 MAX_FOLDERNAME_LENGTH = 100
+
+SECTION_DISPLAY_NAMES = {
+
+    "identificacion":
+        "Identificación",
+
+    "nivelacion":
+        "Nivelación de Aprendizajes",
+
+    "liderazgo":
+        "Liderazgo Pedagógico",
+
+    "asistencia":
+        "Asistencia y Cultura Escolar",
+
+    "nudos_criticos":
+        "Nudos Críticos",
+
+    "segundo_basico":
+        "Segundo Básico",
+
+    "cuarto_basico":
+        "Cuarto Básico",
+
+    "septimo_basico":
+        "Séptimo Básico",
+
+    "primero_medio":
+        "Primero Medio",
+
+    "visitas":
+        "Visitas y Acompañamiento",
+
+    "pade":
+        "Monitoreo PADE",
+
+    "informacion_adicional":
+        "Información Adicional"
+}
+
 
 # ==========================================
 # SECCIONES POR MODALIDAD
@@ -80,7 +129,6 @@ MODALITY_SECTIONS = {
     "Red EE": [
         "identificacion",
         "nivelacion",
-        "liderazgo",
         "asistencia",
         "nudos_criticos",
         "segundo_basico",
@@ -94,5 +142,19 @@ MODALITY_SECTIONS = {
     "Monitoreo SLEP PADE": [
         "identificacion",
         "pade"
+    ],
+
+    "EE PADE": [
+        "identificacion",
+        "nivelacion",
+        "liderazgo",
+        "asistencia",
+        "nudos_criticos",
+        "segundo_basico",
+        "cuarto_basico",
+        "septimo_basico",
+        "primero_medio",
+        "visitas",
+        "informacion_adicional"
     ]
 }

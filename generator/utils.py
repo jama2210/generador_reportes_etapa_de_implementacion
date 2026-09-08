@@ -10,6 +10,9 @@ from config import (
 
 def has_real_content(value):
 
+    if is_not_applicable(value):
+            return False
+    
     if value is None:
         return False
 
@@ -36,15 +39,15 @@ def is_not_applicable(value):
     if value is None:
         return True
 
-    value = str(value).strip().lower()
+    value = str(value).lower().strip()
 
-    patterns = [
+    value = value.replace(";", "")
+
+    return value in [
         "no aplica",
         "n/a",
         "na"
     ]
-
-    return value in patterns
 
 def normalize_text(text):
     """

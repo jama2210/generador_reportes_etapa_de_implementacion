@@ -1,6 +1,22 @@
 from docx.shared import Pt
 from docx.shared import RGBColor
 
+from docx.shared import RGBColor
+
+
+def style_cover_label(cell):
+
+    for paragraph in cell.paragraphs:
+
+        for run in paragraph.runs:
+
+            run.bold = True
+
+            run.font.color.rgb = RGBColor(
+                255,
+                255,
+                255
+            )
 from config import INSTITUTIONAL_COLORS
 
 
@@ -41,3 +57,9 @@ def format_heading(paragraph):
     run.font.bold = True
 
     run.font.size = Pt(15)
+
+    run.font.color.rgb = RGBColor(
+        0,
+        111,
+        179
+    )
