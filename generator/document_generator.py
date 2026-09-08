@@ -300,13 +300,20 @@ class DocumentGenerator:
                 if has_real_content(value):
 
                     if not is_not_applicable(value):
-                        if section_name == "identificacion":
-                            normalized = normalize_text(col)
-                            if(
-                                "fecha" in normalized and
-                                "asesoria" in normalized
-                            ):
-                                continue
+
+                        normalized = normalize_text(col)
+
+                        if (
+                            "fecha" in normalized
+                            and "asesoria" in normalized
+                        ):
+                            continue
+
+                        if (
+                            "fecha" in normalized
+                            and "realizacion" in normalized
+                        ):
+                            continue
 
                         visible_columns.append(col)
 
