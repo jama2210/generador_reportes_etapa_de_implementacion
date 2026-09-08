@@ -1,7 +1,17 @@
 from docx.shared import Pt
 from docx.shared import RGBColor
 
-from docx.shared import RGBColor
+from docx.oxml import parse_xml
+from docx.oxml.ns import nsdecls
+
+
+def set_cell_background(cell, color):
+
+    shading = parse_xml(
+        rf'<w:shd {nsdecls("w")} w:fill="{color}"/>'
+    )
+
+    cell._tc.get_or_add_tcPr().append(shading)
 
 
 def style_cover_label(cell):

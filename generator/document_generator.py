@@ -3,8 +3,6 @@ from io import BytesIO
 from docx import Document
 from docx.shared import Inches
 from config import SECTION_DISPLAY_NAMES
-from docx.oxml import parse_xml
-from docx.oxml.ns import nsdecls
 
 from generator.document_styles import (
     apply_document_styles,
@@ -14,19 +12,6 @@ from generator.document_styles import (
     style_cover_label
 )
 
-
-def set_cell_background(cell, color):
-    """
-    color ejemplo:
-    '006FB3'
-    'FE6565'
-    """
-
-    shading = parse_xml(
-        rf'<w:shd {nsdecls("w")} w:fill="{color}"/>'
-    )
-
-    cell._tc.get_or_add_tcPr().append(shading)
 
 from generator.document_styles import (
     apply_document_styles,
@@ -199,7 +184,7 @@ class DocumentGenerator:
         ].nunique()
 
         if modalidad == "Monitoreo SLEP PADE":
-            table = document.add.table(
+            table = document.add_table(
                 rows=4,
                 cols=2
             )
