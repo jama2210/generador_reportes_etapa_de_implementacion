@@ -154,23 +154,26 @@ class DocumentGenerator:
                     f"Fecha de realización: {date_text}"
                 )
 
-        if template:
+                # ==================================
+                # NUEVA LOGICA V5
+                # ==================================
 
-            self._add_template_record(
-                document,
-                row,
-                template
-            )
+                if template:
 
-        else:
+                    self._add_template_record(
+                        document,
+                        row,
+                        template
+                    )
 
-            self._add_record(
-                document,
-                row,
-                all_sections,
-                allowed_sections
-            )
+                else:
 
+                    self._add_record(
+                        document,
+                        row,
+                        all_sections,
+                        allowed_sections
+                    )
 
         buffer = BytesIO()
 
@@ -385,7 +388,7 @@ class DocumentGenerator:
         row,
         template
     ):
-
+        print("========= TEMPLATE V5 =========")
         for section_title, columns in template.items():
 
             heading = document.add_paragraph(
