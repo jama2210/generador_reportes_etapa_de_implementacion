@@ -14,6 +14,10 @@ from generator.document_styles import (
     style_cover_label
 )
 
+from generator.report_templates import (
+    DIRECTA_EE_TEMPLATE,
+    EE_PADE_TEMPLATE
+)
 
 from generator.document_styles import (
     apply_document_styles,
@@ -47,6 +51,20 @@ from generator.section_classifier import (
 
 class DocumentGenerator:
 
+    def _get_template(
+        self,
+        modalidad
+    ):
+
+        if modalidad == "Directa EE":
+            return DIRECTA_EE_TEMPLATE
+
+        if modalidad == "EE PADE":
+            return EE_PADE_TEMPLATE
+
+        return None
+
+
     def _get_sections_for_modality(
         self,
         modality
@@ -73,6 +91,10 @@ class DocumentGenerator:
             document,
             df_group,
             group_info
+        )
+
+        template = self._get_template(
+            group_info["modalidad"]
         )
 
         all_sections = SectionClassifier.build_section_map(
@@ -132,12 +154,23 @@ class DocumentGenerator:
                     f"Fecha de realización: {date_text}"
                 )
 
-                self._add_record(
-                    document,
-                    row,
-                    all_sections,
-                    allowed_sections
-                )
+        if template:
+
+            self._add_template_record(
+                document,
+                row,
+                template
+            )
+
+        else:
+
+            self._add_record(
+                document,
+                row,
+                all_sections,
+                allowed_sections
+            )
+
 
         buffer = BytesIO()
 
@@ -345,3 +378,51 @@ class DocumentGenerator:
                 r.cells[0].text = str(col)
 
                 r.cells[1].text = str(value)
+
+    def _add_template_record(
+        self,
+        document,
+        row,
+        template
+    ):
+
+        for section_title, columns in template.items():
+
+            heading = document.add_paragraph(
+                section_title
+            )
+
+            format_heading(heading)
+
+            table = document.add_table(
+                rows=0,
+                cols=2
+            )
+
+            table.style = "Light Grid Accent 1"
+
+            has_data = False
+
+            for column_name in columns:
+
+                value = row.get(column_name)
+
+                if not has_real_content(value):
+                    continue
+
+                if is_not_applicable(value):
+                    continue
+
+                has_data = True
+
+                r = table.add_row()
+
+                r.cells[0].text = column_name
+
+                r.cells[1].text = str(value)
+
+            if not has_data:
+
+                table._element.getparent().remove(
+                    table._element
+                )
