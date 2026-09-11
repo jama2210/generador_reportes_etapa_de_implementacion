@@ -390,6 +390,15 @@ class DocumentGenerator:
     ):
         print("========= TEMPLATE V5 =========")
 
+        # Crear índice de columnas normalizadas
+        normalized_row = {}
+
+        for original_column, value in row.items():
+            normalized_column = normalize_text(original_column)
+
+            if normalized_column not in normalized_row:
+                normalized_row[normalized_column] = value
+
         for section_title, columns in template.items():
 
             heading = document.add_paragraph(
@@ -409,7 +418,30 @@ class DocumentGenerator:
 
             for column_name in columns:
 
-                value = row.get(column_name)
+                # Normalizar nombre de la columna de la plantilla
+                normalized_column_name = normalize_text(
+                    column_name
+                )
+
+                # Buscar utilizando el nombre normalizado
+                value = normalized_row.get(
+                    normalized_column_name
+                )
+
+                print(
+                    "buscando:",
+                    column_name
+                )
+
+                print(
+                    "normalizada:",
+                    normalized_column_name
+                )
+
+                print(
+                    "valor encontrado:",
+                    value
+                )
 
                 if not has_real_content(value):
                     continue
@@ -421,11 +453,20 @@ class DocumentGenerator:
 
                 r = table.add_row()
 
+                # Mostrar el nombre definido en la plantilla
                 r.cells[0].text = column_name
+
+                # Mostrar el contenido del Excel
                 r.cells[1].text = str(value)
 
+            # Si ninguna columna de esta sección tiene información,
+            # eliminar la tabla y también el subtítulo.
             if not has_data:
 
                 table._element.getparent().remove(
                     table._element
+                )
+
+                heading._element.getparent().remove(
+                    heading._element
                 )
