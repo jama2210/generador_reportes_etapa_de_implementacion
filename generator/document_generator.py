@@ -388,14 +388,8 @@ class DocumentGenerator:
         row,
         template
     ):
-        for column_name in columns:
-            print("buscando:" , column_name)
-
-            value = row.get(column_name)
-
-            print("valor encontrado:", value)
-
         print("========= TEMPLATE V5 =========")
+
         for section_title, columns in template.items():
 
             heading = document.add_paragraph(
@@ -428,7 +422,6 @@ class DocumentGenerator:
                 r = table.add_row()
 
                 r.cells[0].text = column_name
-
                 r.cells[1].text = str(value)
 
             if not has_data:
