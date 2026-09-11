@@ -388,6 +388,13 @@ class DocumentGenerator:
         row,
         template
     ):
+        for column_name in columns:
+            print("buscando:" , column_name)
+
+            value = row.get(column_name)
+
+            print("valor encontrado:", value)
+
         print("========= TEMPLATE V5 =========")
         for section_title, columns in template.items():
 
