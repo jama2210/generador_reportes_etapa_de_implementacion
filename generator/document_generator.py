@@ -388,16 +388,12 @@ class DocumentGenerator:
         row,
         template
     ):
-        print("========= TEMPLATE V5 =========")
+        print("\n========== COLUMNAS DEL ROW ==========")
 
-        # Crear índice de columnas normalizadas
-        normalized_row = {}
+        for c in row.keys():
+            print(repr(c))
 
-        for original_column, value in row.items():
-            normalized_column = normalize_text(original_column)
-
-            if normalized_column not in normalized_row:
-                normalized_row[normalized_column] = value
+        print("=====================================\n")
 
         for section_title, columns in template.items():
 
@@ -418,30 +414,33 @@ class DocumentGenerator:
 
             for column_name in columns:
 
-                # Normalizar nombre de la columna de la plantilla
-                normalized_column_name = normalize_text(
+                value = None
+
+                normalized_target = normalize_text(
                     column_name
                 )
 
-                # Buscar utilizando el nombre normalizado
-                value = normalized_row.get(
-                    normalized_column_name
-                )
+                for real_column in row.keys():
 
-                print(
-                    "buscando:",
-                    column_name
-                )
+                    normalized_real = normalize_text(
+                        str(real_column)
+                    )
 
-                print(
-                    "normalizada:",
-                    normalized_column_name
-                )
+                    if normalized_target == normalized_real:
 
-                print(
-                    "valor encontrado:",
-                    value
-                )
+                        value = row.get(
+                            real_column
+                        )
+
+                        break
+
+                if value is None:
+
+                    print(
+                        f"[V5] Columna no encontrada: {column_name}"
+                    )
+
+                    continue
 
                 if not has_real_content(value):
                     continue
@@ -453,20 +452,18 @@ class DocumentGenerator:
 
                 r = table.add_row()
 
-                # Mostrar el nombre definido en la plantilla
-                r.cells[0].text = column_name
-
-                # Mostrar el contenido del Excel
-                r.cells[1].text = str(value)
-
-            # Si ninguna columna de esta sección tiene información,
-            # eliminar la tabla y también el subtítulo.
-            if not has_data:
-
-                table._element.getparent().remove(
-                    table._element
+                r.cells[0].text = str(
+                    column_name
                 )
 
-                heading._element.getparent().remove(
-                    heading._element
+                r.cells[1].text = str(
+                    value
+                )
+
+            if not has_data:
+
+                tbl = table._element
+
+                tbl.getparent().remove(
+                    tbl
                 )
