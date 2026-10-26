@@ -14,9 +14,18 @@ from generator.document_styles import (
     style_cover_label
 )
 
+from generator.modality_templates import (
+    DIRECTA_EE,
+    EE_PADE,
+    RED_EE,
+    MONITOREO_PADE
+)
+
 from generator.report_templates import (
     DIRECTA_EE_TEMPLATE,
-    EE_PADE_TEMPLATE
+    EE_PADE_TEMPLATE,
+    RED_EE_TEMPLATE,
+    MONITOREO_PADE_TEMPLATE
 )
 
 from generator.document_styles import (
@@ -56,11 +65,17 @@ class DocumentGenerator:
         modalidad
     ):
 
-        if modalidad == "Directa EE":
+        if modalidad == DIRECTA_EE:
             return DIRECTA_EE_TEMPLATE
 
-        if modalidad == "EE PADE":
+        if modalidad == EE_PADE:
             return EE_PADE_TEMPLATE
+
+        if modalidad == RED_EE:
+            return RED_EE_TEMPLATE
+
+        if modalidad == MONITOREO_PADE:
+            return MONITOREO_PADE_TEMPLATE
 
         return None
 
@@ -388,82 +403,68 @@ class DocumentGenerator:
         row,
         template
     ):
-        print("\n========== COLUMNAS DEL ROW ==========")
 
-        for c in row.keys():
-            print(repr(c))
+        normalized_columns = {
 
-        print("=====================================\n")
+            normalize_text(col): col
+            for col in row.keys()
+        }
 
-        for section_title, columns in template.items():
+        for section_title, patterns in template.items():
+
+            section_rows = []
+
+            for pattern in patterns:
+
+                normalized_pattern = normalize_text(
+                    pattern
+                )
+
+                for norm_col, real_col in normalized_columns.items():
+
+                    if normalized_pattern in norm_col:
+
+                        value = row.get(
+                            real_col
+                        )
+
+                        if not has_real_content(value):
+                            continue
+
+                        if is_not_applicable(value):
+                            continue
+
+                        section_rows.append(
+                            (
+                                real_col,
+                                value
+                            )
+                        )
+
+            if not section_rows:
+                continue
 
             heading = document.add_paragraph(
                 section_title
             )
 
-            format_heading(heading)
+            format_heading(
+                heading
+            )
 
             table = document.add_table(
                 rows=0,
                 cols=2
             )
 
-            table.style = "Light Grid Accent 1"
+            table.style = (
+                "Light Grid Accent 1"
+            )
 
-            has_data = False
-
-            for column_name in columns:
-
-                value = None
-
-                normalized_target = normalize_text(
-                    column_name
-                )
-
-                for real_column in row.keys():
-
-                    normalized_real = normalize_text(
-                        str(real_column)
-                    )
-
-                    if normalized_target == normalized_real:
-
-                        value = row.get(
-                            real_column
-                        )
-
-                        break
-
-                if value is None:
-
-                    print(
-                        f"[V5] Columna no encontrada: {column_name}"
-                    )
-
-                    continue
-
-                if not has_real_content(value):
-                    continue
-
-                if is_not_applicable(value):
-                    continue
-
-                has_data = True
+            for col, value in section_rows:
 
                 r = table.add_row()
 
-                r.cells[0].text = str(
-                    column_name
-                )
+                r.cells[0].text = str(col)
 
-                r.cells[1].text = str(
-                    value
-                )
-
-            if not has_data:
-
-                tbl = table._element
-
-                tbl.getparent().remove(
-                    tbl
-                )
+                r.cells[1].text = str(value)

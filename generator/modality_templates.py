@@ -1,0 +1,4 @@
+DIRECTA_EE = "Directa EE"
+EE_PADE = "EE PADE"
+RED_EE = "Red EE"
+MONITOREO_PADE = "Monitoreo SLEP PADE"

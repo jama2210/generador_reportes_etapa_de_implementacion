@@ -1,39 +1,90 @@
 DIRECTA_EE_TEMPLATE = {
 
     "Identificación": [
-        "ID",
-        "Correo electrónico",
-        "Indique su región",
-        "DEPROV",
-        "SUPERVISOR",
-        "TIPO ASESORÍA",
-        "NOMBRE ASESORÍA"
+        "id",
+        "correo",
+        "region",
+        "deprov",
+        "supervisor",
+        "tipo asesoria",
+        "nombre asesoria"
     ],
 
     "Nivelación de Aprendizajes": [
-        "Marcar con una equis (X) las acciones correspondientes a los focos del Plan trabajado en la sesión de asesoría.",
-        "Hallazgos y Evidencias de Nivelación de Aprendizajes",
-        "Brechas detectadas de Nivelación de Aprendizajes",
-        "Acuerdos y Acciones para cerrar brechas detectadas de Nivelación de Aprendizajes"
+        "marcar con una equis",
+        "hallazgos y evidencias de nivelacion",
+        "brechas detectadas de nivelacion",
+        "acuerdos y acciones para cerrar brechas detectadas de nivelacion"
     ],
 
     "Liderazgo Pedagógico y Acompañamiento": [
-        "Marcar con una equis (X) las acciones correspondientes a los focos del Plan trabajado en la sesión de asesoría.2",
-        "Hallazgos y Evidencias de Liderazgo Pedagógico y Acompañamiento",
-        "Brechas detectadas de Liderazgo Pedagógico y Acompañamiento",
-        "Acuerdos y acciones para cerrar brechas detectadas de Liderazgo Pedagógico y Acompañamiento"
+        "sesion de asesoria.2",
+        "hallazgos y evidencias de liderazgo",
+        "brechas detectadas de liderazgo",
+        "acuerdos y acciones para cerrar brechas detectadas de liderazgo"
     ],
 
     "Asistencia y Cultura Escolar": [
-        "Marcar con una equis (X) las acciones correspondientes a los focos del Plan trabajado en la sesión de asesoría.3",
-        "Hallazgos y Evidencias de Asistencia y Cultura Escolar",
-        "Brechas detectadas de Asistencia y Cultura Escolar",
-        "Acuerdos y acciones para cerrar brechas detectadas de Asistencia y Cultura Escolar"
+        "sesion de asesoria.3",
+        "hallazgos y evidencias de asistencia",
+        "brechas detectadas de asistencia",
+        "acuerdos y acciones para cerrar brechas detectadas de asistencia"
     ],
 
     "Nudo Crítico": [
-        "Nudo(s) crítico(s) institucional(es) detectado(s) en la visita que requiera apoyo y que deba ser resuelto para la siguiente sesión."
+        "nudo(s) critico"
+    ],
+
+    "Resumen de la Sesión": [
+        "principales lineas desarrolladas",
+        "principales acuerdos"
     ]
 }
 
 EE_PADE_TEMPLATE = DIRECTA_EE_TEMPLATE
+
+
+MONITOREO_PADE_TEMPLATE = {
+
+    "Identificación": [
+        "id",
+        "correo",
+        "region",
+        "deprov",
+        "supervisor",
+        "tipo asesoria",
+        "nombre asesoria"
+    ],
+
+    "Monitoreo PADE": [
+        "nivel de avance",
+        "principal obstaculo",
+        "implementacion del pade"
+    ]
+}
+
+
+RED_EE_TEMPLATE = {
+
+    "Identificación": [
+        "id",
+        "correo",
+        "region",
+        "deprov",
+        "supervisor",
+        "tipo asesoria",
+        "nombre asesoria"
+    ],
+
+    "Trabajo en Red": [
+        "reensenanza",
+        "competencias lectoras",
+        "pensamiento logico",
+        "convivencia",
+        "desarrollo socioemocional",
+        "sentido de pertenencia",
+        "herramientas didacticas",
+        "estrategias didacticas",
+        "dua"
+    ]
+}
