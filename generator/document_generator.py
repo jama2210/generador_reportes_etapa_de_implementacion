@@ -513,9 +513,7 @@ class DocumentGenerator:
 
                 r = table.add_row()
 
-                r.cells[0].text = (
-                    f"[{section_title}] {col}"
-                )
+                r.cells[0].text = str(col)
 
                 r.cells[1].text = str(value)
 
@@ -586,18 +584,19 @@ class DocumentGenerator:
 
         for norm_col, real_col in normalized_columns.items():
 
-            if any(
-                x in norm_col
-                for x in [
-                    "id",
-                    "correo",
-                    "region",
-                    "deprov",
-                    "supervisor",
-                    "tipo asesoria",
-                    "nombre asesoria"
-                ]
-            ):
+            # if any(
+            #     x in norm_col
+            #     for x in [
+            #         "id",
+            #         "correo",
+            #         "region",
+            #         "deprov",
+            #         "supervisor",
+            #         "tipo asesoria",
+            #         "nombre asesoria"
+            #     ]
+            # ):
+            if norm_col in IDENTIFICACION_COLUMNS:
 
                 value = row.get(real_col)
 
