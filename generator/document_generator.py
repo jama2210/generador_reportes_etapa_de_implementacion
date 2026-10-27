@@ -170,10 +170,17 @@ class DocumentGenerator:
                 )
 
                 # ==================================
-                # NUEVA LOGICA V5
+                # NUEVA LOGICA V6
                 # ==================================
 
-                if template:
+                if group_info["modalidad"] == RED_EE:
+
+                    self._add_red_ee_record(
+                        document,
+                        row
+                    )
+
+                elif template:
 
                     self._add_template_record(
                         document,
@@ -468,3 +475,117 @@ class DocumentGenerator:
                 r.cells[0].text = str(col)
 
                 r.cells[1].text = str(value)
+
+    def _add_red_ee_record(
+        self,
+        document,
+        row
+    ):
+
+        sections = {
+
+            "Identificación": [
+                "id",
+                "correo",
+                "region",
+                "deprov",
+                "supervisor",
+                "tipo asesoria",
+                "nombre asesoria"
+            ],
+
+            "Segundo Básico": [
+                "2 basico"
+            ],
+
+            "Cuarto Básico": [
+                "4 basico"
+            ],
+
+            "Séptimo Básico": [
+                "7 basico"
+            ],
+
+            "Primero Medio": [
+                "1 medio"
+            ]
+        }
+
+        normalized_columns = {
+
+            normalize_text(col): col
+            for col in row.keys()
+        }
+
+        for section_title, patterns in sections.items():
+
+            section_rows = []
+
+            for pattern in patterns:
+
+                pattern = normalize_text(
+                    pattern
+                )
+
+                for norm_col, real_col in normalized_columns.items():
+
+                    if pattern in norm_col:
+
+                        value = row.get(
+                            real_col
+                        )
+
+                        if not has_real_content(value):
+                            continue
+
+                        if is_not_applicable(value):
+                            continue
+
+                        section_rows.append(
+                            (
+                                real_col,
+                                value
+                            )
+                        )
+
+            if not section_rows:
+                continue
+
+            heading = document.add_paragraph(
+                section_title
+            )
+
+            format_heading(
+                heading
+            )
+
+            table = document.add_table(
+                rows=0,
+                cols=2
+            )
+
+            table.style = (
+                "Light Grid Accent 1"
+            )
+
+            for col, value in section_rows:
+
+                normalized = normalize_text(
+                    col
+                )
+
+                if (
+                    "fecha" in normalized
+                    and "asesoria" in normalized
+                ):
+                    continue
+
+                row_table = table.add_row()
+
+                row_table.cells[0].text = str(
+                    col
+                )
+
+                row_table.cells[1].text = str(
+                    value
+                )

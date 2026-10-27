@@ -41,7 +41,36 @@ DIRECTA_EE_TEMPLATE = {
     ]
 }
 
-EE_PADE_TEMPLATE = DIRECTA_EE_TEMPLATE
+
+RED_EE_TEMPLATE = {
+
+    "Identificación": [
+        "ID",
+        "Correo electrónico",
+        "Indique su región",
+        "DEPROV",
+        "SUPERVISOR",
+        "TIPO ASESORÍA",
+        "NOMBRE ASESORÍA"
+    ],
+
+    "Segundo Básico": [
+        "2 basico"
+    ],
+
+    "Cuarto Básico": [
+        "4 basico"
+    ],
+
+    "Séptimo Básico": [
+        "7 basico"
+    ],
+
+    "Primero Medio": [
+        "1 medio"
+    ]
+}
+
 
 
 MONITOREO_PADE_TEMPLATE = {
@@ -63,28 +92,3 @@ MONITOREO_PADE_TEMPLATE = {
     ]
 }
 
-
-RED_EE_TEMPLATE = {
-
-    "Identificación": [
-        "id",
-        "correo",
-        "region",
-        "deprov",
-        "supervisor",
-        "tipo asesoria",
-        "nombre asesoria"
-    ],
-
-    "Trabajo en Red": [
-        "reensenanza",
-        "competencias lectoras",
-        "pensamiento logico",
-        "convivencia",
-        "desarrollo socioemocional",
-        "sentido de pertenencia",
-        "herramientas didacticas",
-        "estrategias didacticas",
-        "dua"
-    ]
-}
