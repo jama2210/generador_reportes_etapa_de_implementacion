@@ -71,8 +71,6 @@ RED_EE_TEMPLATE = {
     ]
 }
 
-
-
 MONITOREO_PADE_TEMPLATE = {
 
     "Identificación": [

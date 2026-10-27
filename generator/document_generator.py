@@ -181,7 +181,7 @@ class DocumentGenerator:
                     )
 
                 elif template:
-
+                    print(template)
                     self._add_template_record(
                         document,
                         row,
@@ -410,6 +410,9 @@ class DocumentGenerator:
         row,
         template
     ):
+        print(
+            "USANDO _add_template_record VERSION V6"
+        )
 
         normalized_columns = {
             normalize_text(col): col
