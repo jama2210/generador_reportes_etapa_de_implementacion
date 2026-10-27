@@ -58,6 +58,24 @@ from generator.section_classifier import (
     SectionClassifier
 )
 
+IDENTIFICACION_COLUMNS = {
+
+    "id",
+
+    "correo electronico",
+
+    "indique su region",
+
+    "deprov",
+
+    "supervisor",
+
+    "tipo asesoria",
+
+    "nombre asesoria"
+
+}
+
 class DocumentGenerator:
 
     def _get_template(
@@ -439,26 +457,10 @@ class DocumentGenerator:
                     if is_not_applicable(value):
                         continue
 
-                    # IDENTIFICACION
                     if section_title == "Identificación":
 
-                        allowed = [
-                            "id",
-                            "correo",
-                            "region",
-                            "deprov",
-                            "supervisor",
-                            "tipo asesoria",
-                            "nombre asesoria"
-                        ]
+                        if norm_col in IDENTIFICACION_COLUMNS:
 
-                        if any(
-                            x in norm_col
-                            for x in allowed    
-                        ):
-                            print(
-                                f"SECCION={section_title} | COLUMNA={real_col}"
-                            )
                             section_rows.append(
                                 (
                                     real_col,
