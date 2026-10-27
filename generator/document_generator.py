@@ -412,7 +412,6 @@ class DocumentGenerator:
     ):
 
         normalized_columns = {
-
             normalize_text(col): col
             for col in row.keys()
         }
@@ -429,24 +428,48 @@ class DocumentGenerator:
 
                 for norm_col, real_col in normalized_columns.items():
 
-                    if normalized_pattern in norm_col:
+                    value = row.get(real_col)
 
-                        value = row.get(
-                            real_col
-                        )
+                    if not has_real_content(value):
+                        continue
 
-                        if not has_real_content(value):
-                            continue
+                    if is_not_applicable(value):
+                        continue
 
-                        if is_not_applicable(value):
-                            continue
+                    # IDENTIFICACION
+                    if section_title == "Identificación":
 
-                        section_rows.append(
-                            (
-                                real_col,
-                                value
+                        allowed = [
+                            "id",
+                            "correo",
+                            "region",
+                            "deprov",
+                            "supervisor",
+                            "tipo asesoria",
+                            "nombre asesoria"
+                        ]
+
+                        if any(
+                            x in norm_col
+                            for x in allowed
+                        ):
+                            section_rows.append(
+                                (
+                                    real_col,
+                                    value
+                                )
                             )
-                        )
+
+                    else:
+
+                        if normalized_pattern in norm_col:
+
+                            section_rows.append(
+                                (
+                                    real_col,
+                                    value
+                                )
+                            )
 
             if not section_rows:
                 continue
@@ -468,7 +491,14 @@ class DocumentGenerator:
                 "Light Grid Accent 1"
             )
 
+            added = set()
+
             for col, value in section_rows:
+
+                if col in added:
+                    continue
+
+                added.add(col)
 
                 r = table.add_row()
 
@@ -495,60 +525,113 @@ class DocumentGenerator:
             ],
 
             "Segundo Básico": [
-                "2 basico"
+                "2° básico",
+                "2º básico"
             ],
 
             "Cuarto Básico": [
-                "4 basico"
+                "4° básico",
+                "4º básico"
             ],
 
             "Séptimo Básico": [
-                "7 basico"
+                "7° básico",
+                "7º año básico"
             ],
 
             "Primero Medio": [
-                "1 medio"
+                "1° medio",
+                "1º año medio"
             ]
         }
 
         normalized_columns = {
-
             normalize_text(col): col
             for col in row.keys()
         }
 
-        for section_title, patterns in sections.items():
+        # --------------------------
+        # IDENTIFICACION
+        # --------------------------
 
-            section_rows = []
+        heading = document.add_paragraph(
+            "Identificación"
+        )
 
-            for pattern in patterns:
+        format_heading(
+            heading
+        )
 
-                pattern = normalize_text(
-                    pattern
-                )
+        table = document.add_table(
+            rows=0,
+            cols=2
+        )
 
-                for norm_col, real_col in normalized_columns.items():
+        table.style = (
+            "Light Grid Accent 1"
+        )
 
-                    if pattern in norm_col:
+        for norm_col, real_col in normalized_columns.items():
 
-                        value = row.get(
-                            real_col
+            if any(
+                x in norm_col
+                for x in [
+                    "id",
+                    "correo",
+                    "region",
+                    "deprov",
+                    "supervisor",
+                    "tipo asesoria",
+                    "nombre asesoria"
+                ]
+            ):
+
+                value = row.get(real_col)
+
+                if not has_real_content(value):
+                    continue
+
+                if is_not_applicable(value):
+                    continue
+
+                r = table.add_row()
+
+                r.cells[0].text = real_col
+                r.cells[1].text = str(value)
+
+        # --------------------------
+        # NIVELES
+        # --------------------------
+
+        for section_title, patterns in list(
+            sections.items()
+        )[1:]:
+
+            rows = []
+
+            for norm_col, real_col in normalized_columns.items():
+
+                if any(
+                    normalize_text(p) in norm_col
+                    for p in patterns
+                ):
+
+                    value = row.get(real_col)
+
+                    if not has_real_content(value):
+                        continue
+
+                    if is_not_applicable(value):
+                        continue
+
+                    rows.append(
+                        (
+                            real_col,
+                            value
                         )
+                    )
 
-                        if not has_real_content(value):
-                            continue
-
-                        if is_not_applicable(value):
-                            continue
-
-                        section_rows.append(
-                            (
-                                real_col,
-                                value
-                            )
-                        )
-
-            if not section_rows:
+            if not rows:
                 continue
 
             heading = document.add_paragraph(
@@ -568,24 +651,9 @@ class DocumentGenerator:
                 "Light Grid Accent 1"
             )
 
-            for col, value in section_rows:
+            for col, value in rows:
 
-                normalized = normalize_text(
-                    col
-                )
+                r = table.add_row()
 
-                if (
-                    "fecha" in normalized
-                    and "asesoria" in normalized
-                ):
-                    continue
-
-                row_table = table.add_row()
-
-                row_table.cells[0].text = str(
-                    col
-                )
-
-                row_table.cells[1].text = str(
-                    value
-                )
+                r.cells[0].text = col
+                r.cells[1].text = str(value)
