@@ -454,8 +454,11 @@ class DocumentGenerator:
 
                         if any(
                             x in norm_col
-                            for x in allowed
+                            for x in allowed    
                         ):
+                            print(
+                                f"SECCION={section_title} | COLUMNA={real_col}"
+                            )
                             section_rows.append(
                                 (
                                     real_col,
@@ -467,6 +470,9 @@ class DocumentGenerator:
 
                         if normalized_pattern in norm_col:
 
+                            print(
+                                 f"SECCION={section_title} | COLUMNA={real_col}"
+                            )
                             section_rows.append(
                                 (
                                     real_col,
