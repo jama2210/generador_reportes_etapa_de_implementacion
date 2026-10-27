@@ -511,7 +511,9 @@ class DocumentGenerator:
 
                 r = table.add_row()
 
-                r.cells[0].text = str(col)
+                r.cells[0].text = (
+                    f"[{section_title}] {col}"
+                )
 
                 r.cells[1].text = str(value)
 
